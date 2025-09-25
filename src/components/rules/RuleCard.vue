@@ -34,6 +34,8 @@
       <ProxyName
         :name="rule.proxy"
         class="badge badge-sm gap-0"
+        :class="proxyGroupList.includes(rule.proxy) ? 'cursor-pointer' : ''"
+        @click="handleRuleClick(rule.proxy)"
       />
       <template v-if="proxyNode?.now && displayNowNodeInRule">
         <ArrowRightCircleIcon class="h-4 w-4" />
@@ -56,10 +58,11 @@
 <script setup lang="ts">
 import { updateRuleProviderAPI } from '@/api'
 import { useBounceOnVisible } from '@/composables/bouncein'
+import { useRule } from '@/composables/rule'
 import { NOT_CONNECTED } from '@/constant'
 import { getColorForLatency } from '@/helper'
 import { useTooltip } from '@/helper/tooltip'
-import { getLatencyByName, getNowProxyNodeName, proxyMap } from '@/store/proxies'
+import { getLatencyByName, getNowProxyNodeName, proxyGroupList, proxyMap } from '@/store/proxies'
 import { fetchRules, ruleProviderList } from '@/store/rules'
 import { displayLatencyInRule, displayNowNodeInRule } from '@/store/settings'
 import type { Rule } from '@/types'
@@ -118,6 +121,15 @@ const updateRuleProviderClickHandler = async () => {
 
 const showMMDBSizeTip = (e: Event) => {
   showTip(e, t('mmdbSizeTip'))
+}
+
+const { handlerInfo } = useRule()
+const handleRuleClick = (proxy: string) => {
+  if (!proxyGroupList.value.includes(proxy)) {
+    return
+  }
+
+  handlerInfo(proxy)
 }
 
 useBounceOnVisible()

@@ -32,6 +32,7 @@
         />
       </template>
     </VirtualScroller>
+    <RuleProxySelectorModal />
   </div>
 </template>
 
@@ -39,6 +40,7 @@
 import VirtualScroller from '@/components/common/VirtualScroller.vue'
 import RuleCard from '@/components/rules/RuleCard.vue'
 import RuleProvider from '@/components/rules/RuleProvider.vue'
+import RuleProxySelectorModal from '@/components/rules/RuleProxySelectorModal.vue'
 import { RULE_TAB_TYPE } from '@/constant'
 import { fetchRules, renderRules, renderRulesProvider, rules, rulesTabShow } from '@/store/rules'
 import type { Rule } from '@/types'
