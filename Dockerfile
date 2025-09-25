@@ -1,22 +1,24 @@
-FROM --platform=linux/amd64 docker.io/node:alpine AS builder
+# Builder
+FROM --platform=linux/amd64 node:20-alpine AS builder
+WORKDIR /app
 
-ENV HUSKY=0
-WORKDIR /build
+RUN npm i -g pnpm
 
 COPY . .
+RUN pnpm set strict-ssl false && pnpm i
 
-RUN corepack enable
-RUN corepack prepare pnpm@latest --activate
-RUN pnpm install
-RUN pnpm build
+RUN pnpm build \
+  # remove source maps - people like small image
+  && rm public/*.map || true
 
-FROM docker.io/caddy:alpine
+# Release
+FROM metacubex/mihomo:v1.19.14
 
-EXPOSE 80
+# install nginx
+RUN apk update && apk add nginx
 
-WORKDIR /srv
-
-COPY --from=builder /build/dist/. .
-COPY Caddyfile .
-
-CMD ["caddy", "run"]
+ADD docker/default.conf /etc/nginx/http.d/
+RUN rm -rf /usr/share/nginx/html/*
+COPY --from=builder /app/public /usr/share/nginx/html
+ADD docker/start.sh /
+ENTRYPOINT [ "sh", "/start.sh" ]
