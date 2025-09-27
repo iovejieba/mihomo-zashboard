@@ -1,5 +1,6 @@
 # zashboard
-
+项目改自mihomo-yacd  
+从yacd换成zashboard  同步更新mihomo内核    
 <p align="center">
   <img src="./readme/pc.png" height="300">
   <img src="./readme/mobile.png" height="300">
