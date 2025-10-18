@@ -12,7 +12,7 @@ RUN pnpm build \
   && rm public/*.map || true
 
 # Release
-FROM metacubex/mihomo:v1.19.14
+FROM metacubex/mihomo:v1.19.15
 
 # install nginx
 RUN apk update && apk add nginx
